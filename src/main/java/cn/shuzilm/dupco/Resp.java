@@ -23,7 +23,7 @@ public class Resp {
     private int code;
     // Msg the message of response
     // if code not 0, the msg will tell you the reason
-    private String message;
+    private String msg;
     // Data the data of response, The responses are different depending on the service
     // if code not 0, the data will be nil
     private Object data;
@@ -33,13 +33,13 @@ public class Resp {
 
     public Resp(int code, String message, Object data) {
         this.code = code;
-        this.message = message;
+        this.msg = message;
         this.data = data;
     }
 
     public Resp(int code, String message) {
         this.code = code;
-        this.message = message;
+        this.msg = message;
     }
 
     public int getCode() {
@@ -50,12 +50,12 @@ public class Resp {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public Object getData() {
@@ -70,7 +70,7 @@ public class Resp {
     public String toString() {
         return "Resp{" +
                 "code=" + code +
-                ", message='" + message + '\'' +
+                ", message='" + msg + '\'' +
                 ", data=" + data +
                 '}';
     }

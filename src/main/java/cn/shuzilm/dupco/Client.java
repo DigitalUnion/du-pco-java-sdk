@@ -87,6 +87,7 @@ public class Client {
                     throw  new PcoException("httpclient send post error");
                 }
                 respBody = httpClientResult.getRespBody();
+                System.out.println(httpClientResult.toString());
                 if (httpClientResult.getStatusCode() == 200) {
                     if (respBody != null) {
                         respBody = EncoderUtils.decode(httpClientResult.getRespBody(), this.secretVal);
