@@ -70,7 +70,7 @@ public class Resp {
     public String toString() {
         return "Resp{" +
                 "code=" + code +
-                ", message='" + msg + '\'' +
+                ", msg='" + msg + '\'' +
                 ", data=" + data +
                 '}';
     }

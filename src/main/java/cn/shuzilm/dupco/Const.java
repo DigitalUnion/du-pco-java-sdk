@@ -14,7 +14,8 @@ public class Const {
 
     public static final String sdkVerKey = "sdk_ver";
     public static final String sdkVerForTest = "test";
-    public static final String domain = "http://data.shuzijz.cn/pco/data/sdk";
+    public static final String dataDomain = "http://data.shuzijz.cn/pco/data/sdk";
+    public static final String baseDomain = "http://data.shuzilm.cn/pco/base/sdk";
     public static final String httpMethodPost = "POST";
     public static final String contentTypeJson = "application/json; charset=utf-8";
     public static final String zlibInvalidHeaderErr = "zlib: invalid header";

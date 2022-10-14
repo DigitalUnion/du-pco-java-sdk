@@ -4,11 +4,8 @@ import cn.shuzilm.dupco.utils.EncoderUtils;
 import cn.shuzilm.dupco.utils.HttpClientResult;
 import cn.shuzilm.dupco.utils.HttpClientUtils;
 import com.google.gson.Gson;
-import com.sun.source.tree.NewArrayTree;
 
-import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +19,7 @@ public class Client {
     private String clientId;
     private String secretKey;
     private byte[] secretVal;
+    private String domain;
 
     /**
      * NewClient: create and return a new dupco
@@ -33,6 +31,14 @@ public class Client {
         this.clientId = clientId;
         this.secretKey = secretKey;
         this.secretVal = secretVal.getBytes(StandardCharsets.UTF_8);
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
     public String getClientId() {
@@ -82,12 +88,11 @@ public class Client {
             if (data != null) {
                 byte[] body = EncoderUtils.encode(data, this.secretVal);
                 //sendPost
-                HttpClientResult httpClientResult = HttpClientUtils.doPost(Const.domain, header, body, false);
+                HttpClientResult httpClientResult = HttpClientUtils.doPost(Const.dataDomain, header, body, false);
                 if (httpClientResult.getStatusCode() > 400) {
                     throw  new PcoException("httpclient send post error");
                 }
                 respBody = httpClientResult.getRespBody();
-                System.out.println(httpClientResult.toString());
                 if (httpClientResult.getStatusCode() == 200) {
                     if (respBody != null) {
                         respBody = EncoderUtils.decode(httpClientResult.getRespBody(), this.secretVal);
