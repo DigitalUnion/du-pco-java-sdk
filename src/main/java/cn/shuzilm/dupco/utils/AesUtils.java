@@ -42,9 +42,8 @@ public class AesUtils {
 
     private static byte[] fillKey(byte[] key) throws IOException {
         int l = key.length;
-        switch (l) {
-            case 16,24,32:
-                return key;
+        if (l == 16 || l == 24 || l == 32) {
+            return key;
         }
         if (l < 16) {
             return fillN(key,16);

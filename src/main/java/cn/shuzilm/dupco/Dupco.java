@@ -14,23 +14,33 @@ import java.util.Map;
  * @Description: A simple way to call DigitalUnion service
  * @Date: 2022/09/07 4:09 PM
  */
-public class Client {
+public class Dupco {
 
     private String clientId;
     private String secretKey;
     private byte[] secretVal;
     private String domain;
 
-    /**
-     * NewClient: create and return a new dupco
-     * @param clientId identify of dupco
-     * @param secretKey key of secret
-     * @param secretVal value of secret
-     */
-    public Client(String clientId, String secretKey, String secretVal) {
+    private Dupco(){
+
+    }
+    public static Dupco newDataClient(String clientId, String secretKey, String secretVal){
+        return new Dupco(clientId,secretKey,secretVal,Const.dataDomain);
+    }
+
+    public static Dupco newBaseClient(String clientId, String secretKey, String secretVal){
+        return new Dupco(clientId,secretKey,secretVal,Const.baseDomain);
+    }
+
+    private Dupco(String clientId, String secretKey, String secretVal, String domain) {
         this.clientId = clientId;
         this.secretKey = secretKey;
         this.secretVal = secretVal.getBytes(StandardCharsets.UTF_8);
+        if (domain == null) {
+            this.domain = Const.dataDomain;
+        }else {
+            this.domain = domain;
+        }
     }
 
     public String getDomain() {
@@ -83,12 +93,13 @@ public class Client {
         header.put(Const.clientId,this.clientId);
         header.put(Const.secretKey,this.secretKey);
         header.put(Const.apiIdKey,apiId);
+        header.put(Const.sdkVerKey,Const.sdkVer);
         byte[] respBody = new byte[0];
         try{
             if (data != null) {
                 byte[] body = EncoderUtils.encode(data, this.secretVal);
                 //sendPost
-                HttpClientResult httpClientResult = HttpClientUtils.doPost(Const.dataDomain, header, body, false);
+                HttpClientResult httpClientResult = HttpClientUtils.doPost(this.domain, header, body, false);
                 if (httpClientResult.getStatusCode() > 400) {
                     throw  new PcoException("httpclient send post error");
                 }
