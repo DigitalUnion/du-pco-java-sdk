@@ -25,6 +25,6 @@ public class Const {
     public static final Integer pathErrorCode = 2;
     public static final Integer otherErrorCode = 10999;
 
-    public static String sdkVer = "v0.0.5";
+    public static String sdkVer = "1.0.0";
 
 }

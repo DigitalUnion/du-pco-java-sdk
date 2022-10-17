@@ -3,7 +3,7 @@ package com.my.test;
 import cn.shuzilm.dupco.Dupco;
 import cn.shuzilm.dupco.Resp;
 
-public class ClientMain {
+public class PcoMain {
     public static void main(String[] args) {
         Dupco dupco = Dupco.newDataClient("cloud-test", "aa", "yDpDEihpUsF_RyWsCES1H");
 //        client.enableTestMode();

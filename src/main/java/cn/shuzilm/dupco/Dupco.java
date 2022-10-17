@@ -9,11 +9,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @Author: songhz
- * @Description: A simple way to call DigitalUnion service
- * @Date: 2022/09/07 4:09 PM
- */
 public class Dupco {
 
     private String clientId;
@@ -84,8 +79,8 @@ public class Dupco {
 
     /**
      * call remote function
-     * @param apiId
-     * @param data
+     * @param apiId 接口id
+     * @param data 入参
      * @return Resp response from remote server
      */
     public Resp doCall(String apiId,byte[] data) {
