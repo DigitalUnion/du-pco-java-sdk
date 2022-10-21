@@ -25,7 +25,7 @@ public class Dupco {
      * @param clientId 客户id
      * @param secretKey 密钥key
      * @param secretVal 密钥val
-     * @return
+     * @return 客户端对象
      */
     public static Dupco newDataClient(String clientId, String secretKey, String secretVal){
         return new Dupco(clientId,secretKey,secretVal,Const.dataDomain);
@@ -36,7 +36,7 @@ public class Dupco {
      * @param clientId 客户id
      * @param secretKey 密钥key
      * @param secretVal 密钥val
-     * @return
+     * @return 客户端对象
      */
     public static Dupco newBaseClient(String clientId, String secretKey, String secretVal){
         return new Dupco(clientId,secretKey,secretVal,Const.baseDomain);

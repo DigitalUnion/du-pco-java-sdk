@@ -12,10 +12,9 @@ public class Receiver {
 
     /**
      *
-     * @param request receiver HttpServletRequest
+     * @param request HttpServletRequest
      * @param secret secret
-     * @retur decode data
-     * @throws Exception
+     * @return decode data
      */
     public static byte[] DecodeRequestData(HttpServletRequest request,byte[] secret) throws Exception {
         int length = request.getContentLength();
@@ -33,7 +32,6 @@ public class Receiver {
      * @param data receiver base64 encode data
      * @param secret secret
      * @return  decode data
-     * @throws Exception
      */
     public static byte[] DecodeData(String data,byte[] secret) throws Exception {
         byte[] base64Decode = Base64.getDecoder().decode(data);

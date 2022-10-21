@@ -7,7 +7,6 @@ public class EncoderUtils {
      * @param data 明文
      * @param key  密钥
      * @return  密文
-     * @throws Exception
      */
     public static byte[] encode(byte[] data,byte[] key) throws Exception {
         byte[] compress = Zlib.compress(data);
@@ -19,7 +18,6 @@ public class EncoderUtils {
      * @param data 密文
      * @param key  密钥
      * @return  明文
-     * @throws Exception
      */
     public static byte[] decode(byte[] data,byte[] key) throws Exception {
         byte[] decrypt = AesUtils.aesDecrypt(data, key);
