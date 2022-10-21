@@ -6,7 +6,7 @@
 
     <groupId>io.github.DigitalUnion</groupId>
     <artifactId>du-pco-java-sdk</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.3</version>
 
     <name>du-pco-java-sdk</name>
     <description>DigitalUnion pco java sdk</description>
@@ -28,6 +28,11 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>9.0.33</version>
         </dependency>
 
     </dependencies>
@@ -54,11 +59,6 @@
             <organization>DigitalUnion</organization>
         </developer>
     </developers>
-
-<!--    <properties>-->
-<!--        <java.version>16</java.version>-->
-<!--        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
-<!--    </properties>-->
 
     <build>
         <plugins>
@@ -121,11 +121,11 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
+                <version>1.6.8</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>

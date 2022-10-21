@@ -10,19 +10,20 @@ import java.security.spec.AlgorithmParameterSpec;
 
 public class AesUtils {
 
+    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
+
     public static byte[] aesEncrypt(byte[] data, byte[] key) throws Exception{
         if (key == null) {
             return null;
         }
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");//"算法/模式/补码方式"
         byte[] raw = fillKey(key);
-        byte[] iv = new byte[cipher.getBlockSize()];
         SecretKeySpec sKeySpec = new SecretKeySpec(raw, "AES");
+        Cipher cipher = Cipher.getInstance(ALGORITHM);//"算法/模式/补码方式"
+        byte[] iv = new byte[cipher.getBlockSize()];
         System.arraycopy(raw,0,iv,0,cipher.getBlockSize());
-        AlgorithmParameterSpec paramSpec = new IvParameterSpec(iv);
-        cipher.init(Cipher.ENCRYPT_MODE, sKeySpec,paramSpec);
+        AlgorithmParameterSpec ivSpec = new IvParameterSpec(iv);
+        cipher.init(Cipher.ENCRYPT_MODE, sKeySpec,ivSpec);
         return cipher.doFinal(data);
-        //return new Base64().encodeToString(encrypted);//此处使用BASE64做转码功能，同时能起到2次加密的作用。
     }
 
     public static byte[] aesDecrypt(byte[] data, byte[] key) throws Exception {
@@ -30,7 +31,7 @@ public class AesUtils {
         if (key == null) {
             return null;
         }
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
         byte[] raw = fillKey(key);
         byte[] iv = new byte[cipher.getBlockSize()];
         SecretKeySpec sKeySpec = new SecretKeySpec(raw, "AES");
@@ -42,20 +43,14 @@ public class AesUtils {
 
     private static byte[] fillKey(byte[] key) throws IOException {
         int l = key.length;
-        if (l == 16 || l == 24 || l == 32) {
+        if (l == 16) {
             return key;
         }
         if (l < 16) {
             return fillN(key,16);
         }
-        if (l < 24) {
-            return fillN(key,24);
-        }
-        if (l < 32) {
-            return fillN(key,32);
-        }
-        byte[] bytes = new byte[32];
-        System.arraycopy(key,0,bytes,0,32);
+        byte[] bytes = new byte[16];
+        System.arraycopy(key,0,bytes,0,16);
         return bytes;
     }
 

@@ -19,10 +19,25 @@ public class Dupco {
     private Dupco(){
 
     }
+
+    /**
+     * 创建数据业务客户端对象
+     * @param clientId 客户id
+     * @param secretKey 密钥key
+     * @param secretVal 密钥val
+     * @return
+     */
     public static Dupco newDataClient(String clientId, String secretKey, String secretVal){
         return new Dupco(clientId,secretKey,secretVal,Const.dataDomain);
     }
 
+    /**
+     * 创建基础业务客户端对象
+     * @param clientId 客户id
+     * @param secretKey 密钥key
+     * @param secretVal 密钥val
+     * @return
+     */
     public static Dupco newBaseClient(String clientId, String secretKey, String secretVal){
         return new Dupco(clientId,secretKey,secretVal,Const.baseDomain);
     }
@@ -30,7 +45,7 @@ public class Dupco {
     private Dupco(String clientId, String secretKey, String secretVal, String domain) {
         this.clientId = clientId;
         this.secretKey = secretKey;
-        this.secretVal = secretVal.getBytes(StandardCharsets.UTF_8);
+        this.secretVal = secretVal.getBytes();
         if (domain == null) {
             this.domain = Const.dataDomain;
         }else {
@@ -78,13 +93,13 @@ public class Dupco {
     }
 
     /**
-     * call remote function
+     * 调用远程服务
      * @param apiId 接口id
-     * @param data 入参
-     * @return Resp response from remote server
+     * @param data 请求体明文
+     * @return Resp 解密后的响应体明文
      */
     public Resp doCall(String apiId,byte[] data) {
-        Map<String,String> header = new HashMap<>();
+        Map<String,String> header = new HashMap<String,String>();
         header.put(Const.clientId,this.clientId);
         header.put(Const.secretKey,this.secretKey);
         header.put(Const.apiIdKey,apiId);
