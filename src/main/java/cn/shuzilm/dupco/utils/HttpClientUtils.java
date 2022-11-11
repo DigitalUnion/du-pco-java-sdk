@@ -1,32 +1,29 @@
 package cn.shuzilm.dupco.utils;
 
 import cn.shuzilm.dupco.PcoException;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.*;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.config.Registry;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.socket.PlainConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
+import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.config.Registry;
+import org.apache.hc.core5.http.config.RegistryBuilder;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.util.Timeout;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.*;
@@ -73,9 +70,7 @@ public class HttpClientUtils {
 
     static {
         requestConfig = RequestConfig.custom()
-                .setSocketTimeout(DEFAULT_READ_TIMEOUT)
-                .setConnectTimeout(DEFAULT_CONNECT_TIMEOUT)
-                .setConnectionRequestTimeout(DEFAULT_CONNECT_REQUEST_TIMEOUT)
+                .setConnectionRequestTimeout(Timeout.ofMilliseconds(DEFAULT_CONNECT_REQUEST_TIMEOUT))
                 .build();
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create()
                 .register("http", new PlainConnectionSocketFactory())
@@ -94,51 +89,13 @@ public class HttpClientUtils {
     }
 
 
-    public static HttpClientResult doGet(String url) {
-        return doGet(url, false);
-    }
 
-    public static HttpClientResult doGet(String url, boolean https){
-        return doGet(url, null, null, https);
-    }
-
-    public static HttpClientResult doGet(String url, Map<String, String> headers, Map<String, String> params, boolean https){
-        HttpGet httpGet = null;
-        CloseableHttpResponse httpResponse = null;
-        try {
-            URIBuilder uriBuilder = new URIBuilder(url);
-            if (params != null) {
-                Set<Map.Entry<String, String>> entrySet = params.entrySet();
-                for (Map.Entry<String, String> entry : entrySet) {
-                    uriBuilder.setParameter(entry.getKey(), entry.getValue());
-                }
-            }
-            httpGet = new HttpGet(uriBuilder.build());
-            httpGet.setConfig(requestConfig);
-            setHeader(headers, httpGet);
-            if (https) {
-                return getHttpClientResult(httpResponse, httpsClient, httpGet);
-            } else {
-                return getHttpClientResult(httpResponse, httpClient, httpGet);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // 释放资源
-            if (httpGet != null) {
-                httpGet.releaseConnection();
-            }
-            release(httpResponse);
-        }
-
-        return null;
-    }
 
     public static HttpClientResult doPost(String url, Map<String, String> headers, byte[] body, boolean https) {
         HttpPost httpPost = new HttpPost(url);
         httpPost.setConfig(requestConfig);
         setHeader(headers, httpPost);
-        httpPost.setEntity(new ByteArrayEntity(body));
+        httpPost.setEntity(new ByteArrayEntity(body, ContentType.APPLICATION_OCTET_STREAM));
         httpPost.setHeader("Content-type", "application/octet-stream");
         CloseableHttpResponse httpResponse = null;
         try {
@@ -148,47 +105,12 @@ public class HttpClientUtils {
                 return getHttpClientResult(httpResponse, httpClient, httpPost);
             }
         } finally {
-            httpPost.releaseConnection();
-            release(httpResponse);
-        }
-    }
-
-    public static HttpClientResult doPost(String url, Map<String, String> headers, String json, boolean https) {
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.setConfig(requestConfig);
-        setHeader(headers, httpPost);
-        StringEntity stringEntity = new StringEntity(json, ENCODING);
-        stringEntity.setContentEncoding(ENCODING);
-        httpPost.setEntity(stringEntity);
-        CloseableHttpResponse httpResponse = null;
-        try {
-            if (https) {
-                return getHttpClientResult(httpResponse, httpsClient, httpPost);
-            } else {
-                return getHttpClientResult(httpResponse, httpClient, httpPost);
-            }
-        } finally {
-            httpPost.releaseConnection();
             release(httpResponse);
         }
     }
 
 
-
-    public static HttpClientResult doDelete(String url) {
-        HttpDelete httpDelete = new HttpDelete(url);
-        httpDelete.setConfig(requestConfig);
-        CloseableHttpResponse httpResponse = null;
-        try {
-            return getHttpClientResult(httpResponse, httpClient, httpDelete);
-        } finally {
-            httpDelete.releaseConnection();
-            release(httpResponse);
-        }
-    }
-
-
-    public static void setHeader(Map<String, String> params, HttpRequestBase httpMethod) {
+    public static void setHeader(Map<String, String> params, HttpUriRequestBase httpMethod) {
         // 封装请求头
         if (null != params && !params.isEmpty()) {
             Set<Map.Entry<String, String>> entrySet = params.entrySet();
@@ -200,17 +122,17 @@ public class HttpClientUtils {
     }
 
 
-    public static HttpClientResult getHttpClientResult(CloseableHttpResponse httpResponse, CloseableHttpClient httpClient, HttpRequestBase httpMethod) {
+    public static HttpClientResult getHttpClientResult(CloseableHttpResponse httpResponse, CloseableHttpClient httpClient, HttpUriRequestBase httpMethod) {
         try {
             // 执行请求
             httpResponse = httpClient.execute(httpMethod);
             // 获取返回结果
-            if (httpResponse != null && httpResponse.getStatusLine() != null) {
+            if (httpResponse != null) {
                 byte[] content = new byte[0];
                 if (httpResponse.getEntity() != null) {
                     content = EntityUtils.toByteArray(httpResponse.getEntity());
                 }
-                return new HttpClientResult(httpResponse.getStatusLine().getStatusCode(), content);
+                return new HttpClientResult(httpResponse.getCode(), content);
             }
         } catch (IOException e) {
             throw new PcoException(e.getMessage());

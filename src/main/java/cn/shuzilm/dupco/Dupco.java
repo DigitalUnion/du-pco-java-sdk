@@ -3,7 +3,6 @@ package cn.shuzilm.dupco;
 import cn.shuzilm.dupco.utils.EncoderUtils;
 import cn.shuzilm.dupco.utils.HttpClientResult;
 import cn.shuzilm.dupco.utils.HttpClientUtils;
-import com.google.gson.Gson;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -98,7 +97,7 @@ public class Dupco {
      * @param data 请求体明文
      * @return Resp 解密后的响应体明文
      */
-    public Resp doCall(String apiId,byte[] data) {
+    public byte[] doCall(String apiId,byte[] data) {
         Map<String,String> header = new HashMap<String,String>();
         header.put(Const.clientId,this.clientId);
         header.put(Const.secretKey,this.secretKey);
@@ -121,13 +120,12 @@ public class Dupco {
                         throw  new PcoException("httpclient response body is null");
                     }
                 }
-                Gson gson = new Gson();
-                return gson.fromJson(new String(respBody), Resp.class);
+                return respBody;
             }else {
                 throw new PcoException("this data is null");
             }
         }catch (Exception e){
-            return new Resp(Const.otherErrorCode,e.getMessage());
+            return null;
         }
     }
 

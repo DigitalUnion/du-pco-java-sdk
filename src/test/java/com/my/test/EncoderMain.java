@@ -12,9 +12,5 @@ public class EncoderMain {
         byte[] decode = EncoderUtils.decode(res, key.getBytes());
         System.out.println(new String(decode));
         System.out.println(Base64.getEncoder().encodeToString(res));
-
-//        byte[] bytes = Base64.getDecoder().decode("rubMo/ZeOCFhcWRsXIhWG7/MY8P3HPhgb4VEE5crXGA=");
-//        byte[] decode1 = EncoderUtils.decode(bytes, key.getBytes());
-//        System.out.println(new String(decode1));
     }
 }
