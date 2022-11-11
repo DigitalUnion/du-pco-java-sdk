@@ -5,7 +5,7 @@ pom.xml
 <dependency>
     <groupId>io.github.DigitalUnion</groupId>
     <artifactId>du-pco-java-sdk</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 
 ```
