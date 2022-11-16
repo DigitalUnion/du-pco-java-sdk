@@ -2,11 +2,28 @@
 ## Installation
 pom.xml
 ```xml
-<dependency>
-    <groupId>io.github.DigitalUnion</groupId>
-    <artifactId>du-pco-java-sdk</artifactId>
-    <version>1.0.4</version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>io.github.DigitalUnion</groupId>
+        <artifactId>du-pco-java-sdk</artifactId>
+        <version>1.0.4</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.httpcomponents.client5</groupId>
+        <artifactId>httpclient5</artifactId>
+        <version>5.2</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>2.0.3</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-nop</artifactId>
+        <version>2.0.3</version>
+    </dependency>
+</dependencies>
 
 ```
 
