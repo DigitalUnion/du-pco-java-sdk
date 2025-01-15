@@ -20,6 +20,17 @@ public class Dupco {
     }
 
     /**
+     * 创建自定义客户端对象
+     * @param clientId 客户id
+     * @param secretKey 密钥key
+     * @param secretVal 密钥val
+     * @return 客户端对象
+     */
+    public static Dupco newClient(String domain,String clientId, String secretKey, String secretVal){
+        return new Dupco(clientId,secretKey,secretVal,domain);
+    }
+
+    /**
      * 创建数据业务客户端对象
      * @param clientId 客户id
      * @param secretKey 密钥key
