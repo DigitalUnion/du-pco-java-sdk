@@ -135,8 +135,12 @@ public class Dupco {
             }else {
                 throw new PcoException("this data is null");
             }
-        }catch (Exception e){
-            return null;
+        }catch (PcoException e) {
+            // 直接抛出自定义异常
+            throw e;
+        } catch (Exception e) {
+            // 包装异常，保留堆栈信息，便于排查问题
+            throw new PcoException(e.getMessage(), e);
         }
     }
 
